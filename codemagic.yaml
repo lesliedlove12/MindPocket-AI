@@ -1,82 +1,21 @@
 workflows:
-ios-workflow:
-name: MindPocket iOS
-instance_type: mac_mini_m2
-
-environment:
-ios_signing:
-distribution_type: app_store
-bundle_identifier: com.mindpocket.ai
-xcode: latest
-cocoapods: default
-
-scripts:
-- name: Install dependencies
-script: npm ci
-
-- name: Build web app
-script: npm run build
-
-- name: Sync Capacitor iOS
-script: npx cap sync ios
-
-- name: Install CocoaPods dependencies
-script: |
-cd ios
-pod install
-
-- name: Set up code signing
-script: xcode-project use-profiles
-
-- name: Build IPA
-script: |
-xcode-project build-ipa \
---workspace "$CM_BUILD_DIR/ios/App/App.xcworkspace" \
---scheme "App"
-
-artifacts:
-- build/ios/ipa/*.ipa
-- /tmp/xcodebuild_logs/*.log
-
-
-
-On Wed, Aug 12, 2026 at 10:43 AM Leslie McTighe <lesliedlove12@gmail.com> wrote:
-workflows:
   ios-workflow:
     name: MindPocket iOS
-instance_type: mac_mini_m2
+    instance_type: mac_mini_m2
 
-environment:
-ios_signing:
-distribution_type: app_store
-bundle_identifier: com.mindpocket.ai
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.mindpocket.ai
 xcode: latest
-cocoapods: default
 
 scripts:
 - name: Install dependencies
 script: npm ci
-
 - name: Build web app
 script: npm run build
-
-- name: Sync Capacitor iOS
+- name: Sync Capacitor
 script: npx cap sync ios
-
-- name: Install CocoaPods dependencies
-script: |
-cd ios
-pod install
-
-- name: Set up code signing
-script: xcode-project use-profiles
-
-- name: Build IPA
-script: |
-xcode-project build-ipa \
---workspace "$CM_BUILD_DIR/ios/App/App.xcworkspace" \
---scheme "App"
 
 artifacts:
 - build/ios/ipa/*.ipa
-- /tmp/xcodebuild_logs/*.log
