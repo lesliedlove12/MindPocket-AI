@@ -39,10 +39,11 @@ artifacts:
 - /tmp/xcodebuild_logs/*.log
 
 
-On Wed, Aug 12, 2026 at 10:31 AM Leslie McTighe <lesliedlove12@gmail.com> wrote:
+
+On Wed, Aug 12, 2026 at 10:43 AM Leslie McTighe <lesliedlove12@gmail.com> wrote:
 workflows:
-ios-workflow:
-name: MindPocket iOS
+  ios-workflow:
+    name: MindPocket iOS
 instance_type: mac_mini_m2
 
 environment:
@@ -58,3 +59,24 @@ script: npm ci
 
 - name: Build web app
 script: npm run build
+
+- name: Sync Capacitor iOS
+script: npx cap sync ios
+
+- name: Install CocoaPods dependencies
+script: |
+cd ios
+pod install
+
+- name: Set up code signing
+script: xcode-project use-profiles
+
+- name: Build IPA
+script: |
+xcode-project build-ipa \
+--workspace "$CM_BUILD_DIR/ios/App/App.xcworkspace" \
+--scheme "App"
+
+artifacts:
+- build/ios/ipa/*.ipa
+- /tmp/xcodebuild_logs/*.log
