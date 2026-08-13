@@ -21,13 +21,3 @@ workflows:
       - name: Sync Capacitor
         script: npx cap sync ios
         
-    - name: Build ipa for distribution
-      script: |
-        cd ios/App
-        xcode-project build-ipa \
-          --workspace "App.xcworkspace" \
-            --scheme "App"
-
-    artifacts:
-         - ios/App/build/ios/ipa/*.ipa
-         - /tmp/xcodebuild_logs/*.log
